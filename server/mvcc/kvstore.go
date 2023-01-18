@@ -463,6 +463,12 @@ func restoreIntoIndex(lg *zap.Logger, idx index) (chan<- revKeyValue, <-chan int
 					ok = true
 				}
 			}
+
+			if len(rkv.key) < revBytesLen {
+				lg.Warn("== skip illegal key", zap.String("str_key", rkv.kstr), zap.String("bytes_key", string(rkv.key)))
+				continue
+			}
+			
 			rev := bytesToRev(rkv.key)
 			currentRev = rev.main
 			if ok {
